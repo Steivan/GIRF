@@ -10,6 +10,9 @@ The most relevant modules for a user are the main module GIRF_main.py used to ru
 top-level routines and the module GIRF_models.py containing the parameters for the various example
 models.
 
+![image](https://github.com/Steivan/GIRF/assets/87634614/c00244df-086d-41b5-8b53-e83423723363)
+
+
 ### GIRF_main.py
 Following code extract from the GIRF_main.py module provides an overview of the routines used to
 generate the figures and tables:
