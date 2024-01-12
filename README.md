@@ -5,9 +5,9 @@ Python library GIRF
 The GIRF (Generic Integrated Rating Framework) python library comprises the modules listed in
 Table 1 (dependencies are indicated by a ’+’ symbol). The library is used to generate most figures
 and tables in the printed document and in the online supplementary.
-
-Table 1: GIRF library with python code and dependencies. \\
-Python module   ID  1  2  3  4  5  6  7  8  9  \\
+\n
+Table 1: GIRF library with python code and dependencies. \n
+Python module   ID  1  2  3  4  5  6  7  8  9  \n
 GIRF_main        1  o  +  +           +      
 GIRF_reduced     2     o     +        +
 GIRF_calibrate   3        o  +  +  +  +  +  +
