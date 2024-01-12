@@ -7,10 +7,10 @@ The python library GIRF comprises the modules listed in Table D.1 (dependencies 
 ![image](https://github.com/Steivan/GIRF/assets/87634614/d6b37781-4ca4-4715-84a8-451840c29cec)
 
 ## Modules
-The most relevant modules for a user are the main module GIRF_main.py used to run the various top-level routines and the module GIRF_models.py containing the parameters for the various example models.
+The most relevant modules for a user are the main module ``GIRF_main.py`` used to run the various top-level routines and the module ``GIRF_models.py`` containing the parameters for the various example models.
 
 ### GIRF_main.py
-Following code extract from the GIRF_main.py module provides an overview of the routines used to generate the figures and tables:
+Following code extract from the ``GIRF_main.py`` module provides an overview of the routines used to generate the figures and tables:
 
     if __name__ == "__main__":
     # Generic Integrated Rating Framework (GIRF):
@@ -54,7 +54,7 @@ This module contains the classes used to represent the reduced variables on a cl
 This module contains the routines used to evaluate the calibration parameters with the help of various parametric distributions fitted to the simulated distributions.
 
 ### GIRF_models.py
-This module contains the some global parameters and the specific parameters used in the sample models. The dictionary Red_Fields is used to assign a parametric distribution family to each reduced variable. The dictionary GIRF_fn_dict is used to specify the names and the formats of the output files (Figures and LATEX tables).
+This module contains the some global parameters and the specific parameters used in the sample models. The dictionary ``Red_Fields`` is used to assign a parametric distribution family to each reduced variable. The dictionary ``GIRF_fn_dict`` is used to specify the names and the formats of the output files (Figures and LaTeX tables).
 
 ### GIRF_stats.py
 This module contains some classes which are used as wrappers to the scipy library.
