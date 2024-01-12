@@ -12,6 +12,11 @@ The most relevant modules for a user are the main module GIRF_main.py used to ru
 ### GIRF_main.py
 Following code extract from the GIRF_main.py module provides an overview of the routines used to generate the figures and tables:
 
+``
+Test  
+line 1  
+``
+
  if __name__ == "__main__":
 #### #Generic Integrated Rating Framework (GIRF):
 #### # *******************************************
