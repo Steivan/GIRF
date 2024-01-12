@@ -2,40 +2,15 @@
 Generic framework for a coherent integration of exposure and experience rating
 
 Python library GIRF
-The GIRF (Generic Integrated Rating Framework) python library comprises the modules listed in
-Table 1 (dependencies are indicated by a ’+’ symbol). The library is used to generate most figures
+The GIRF (Generic Integrated Rating Framework) python library comprises nine modules. The library is used to generate most figures
 and tables in the printed document and in the online supplementary.
-\n
-Table 1: GIRF library with python code and dependencies. 
 
-Python module   ID  1  2  3  4  5  6  7  8  9  
-
-GIRF_main        1  o  +  +           +      
-
-GIRF_reduced     2     o     +        +
-
-GIRF_calibrate   3        o  +  +  +  +  +  +
-
-GIRF_plot        4           o     +  +  +  +
-
-GIRF_claim       5              o     +
-
-GIRF_Bayes       6                 o     +
-
-GIRF_models      7                    o
-
-GIRF_stats       8                       o
-
-Transscript      9                          o
-
-External libraries: sys, numpy, scipy, datetime, matplotlib
-
-##Modules
+## Modules
 The most relevant modules for a user are the main module GIRF_main.py used to run the various
 top-level routines and the module GIRF_models.py containing the parameters for the various example
 models.
 
-###GIRF_main.py
+### GIRF_main.py
 Following code extract from the GIRF_main.py module provides an overview of the routines used to
 generate the figures and tables:
 
@@ -65,34 +40,34 @@ generate the figures and tables:
  \# Run full calibration model (Figures 6.5 and 6.6 and Table C.4)
  full_calibration()
 
-GIRF_reduced.py
+### GIRF_reduced.py
 This module is used to generate the chart depicting the reduced variables and the chart depicting the
 claims development patters and the temporal evolution of the lags.
 
 GIRF_calibrate.py
 This module contains the routines used to calibrate the example models.
 
-GIRF_plot.py
+### GIRF_plot.py
 This module contains the routines used to generate the figures with the results of the simulations and
 the figures containing analytical results. The module is also used to generate the tables containing the
 respective parameters.
 
-GIRF_claim.py
+### GIRF_claim.py
 This module contains the classes used to represent the reduced variables on a claims, an annualand a
 periodlevel. It also contains a routine used to generate reduced claims.
 
-GIRF_Bayes.py
+### GIRF_Bayes.py
 This module contains the routines used to evaluate the calibration parameters with the help of various
 parametric distributions fitted to the simulated distributions.
 
-GIRF_models.py
+### GIRF_models.py
 This module contains the some global parameters and the specific parameters used in the sample models.
 The dictionary Red_Fields is used to assign a parametric distribution family to each reduced variable.
 The dictionary GIRF_fn_dict is used to specify the names and the formats of the output files (Figures
 and LATEX tables).
 
-GIRF_stats.py
+### GIRF_stats.py
 This module contains some classes which are used as wrappers to the scipy library.
 
-Transscript.py
+### Transscript.py
 Module used to redirect the output from the console to a text file (and the console).
