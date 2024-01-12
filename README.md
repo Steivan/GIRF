@@ -15,15 +15,15 @@ Following code extract from the GIRF_main.py module provides an overview of the 
     Test
     line 1
 
- if __name__ == "__main__":
-#### #Generic Integrated Rating Framework (GIRF):
-#### # *******************************************
-#### #- Input : the parameters for the various models are defined in:
-#### #- GIRF_models.py
-#### #- Output: the output file names (figures and tables) are defined in:
-#### #- GIRF_models.py / GIRF_fn_dict
-#### #Plots ’claims representation and reduced variables’
-#### #and ’patterns and lags’ (Figures 4.1 and 4.2)
+    if __name__ == "__main__":
+    # Generic Integrated Rating Framework (GIRF):
+    # *******************************************
+    # - Input : the parameters for the various models are defined in:
+    # - GIRF_models.py
+    # - Output: the output file names (figures and tables) are defined in:
+    # - GIRF_models.py / GIRF_fn_dict
+    # Plots ’claims representation and reduced variables’
+    # and ’patterns and lags’ (Figures 4.1 and 4.2)
 #### patterns_and_red_var()
 #### #Create default parameters: copy / paste from console to
 #### #module GIRF_models.py
