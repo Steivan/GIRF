@@ -12,9 +12,6 @@ The most relevant modules for a user are the main module GIRF_main.py used to ru
 ### GIRF_main.py
 Following code extract from the GIRF_main.py module provides an overview of the routines used to generate the figures and tables:
 
-    Test
-    line 1
-
     if __name__ == "__main__":
     # Generic Integrated Rating Framework (GIRF):
     # *******************************************
@@ -24,22 +21,22 @@ Following code extract from the GIRF_main.py module provides an overview of the 
     # - GIRF_models.py / GIRF_fn_dict
     # Plots ’claims representation and reduced variables’
     # and ’patterns and lags’ (Figures 4.1 and 4.2)
-#### patterns_and_red_var()
-#### #Create default parameters: copy / paste from console to
-#### #module GIRF_models.py
-#### get_freq_model_new_default(K=100)
-#### #Four plots ’calibration of the annual observations’ an print
-#### #parameters (Figure 6.1 (a)-(d) and Table 6.1 = C.1)
-#### calibrate_claims_count()
-#### #Plots ’conditional’ and ’unconditional calibration statistics
-#### #(Figures 6.2 and 6.3)
-#### claims_count_stats()
-#### #Plot ’fitting comparison’ (Figure 6.4)
-#### calibration_comparison()
-#### #Print model and calibration parameters (Tables 6.2 = C.2 and 6.3 = C.3)
-#### model_comparison()
-#### #Run full calibration model (Figures 6.5 and 6.6 and Table C.4)
-#### full_calibration()
+    patterns_and_red_var()
+    # Create default parameters: copy / paste from console to
+    # module GIRF_models.py
+    get_freq_model_new_default(K=100)
+    # Four plots ’calibration of the annual observations’ an print
+    # parameters (Figure 6.1 (a)-(d) and Table 6.1 = C.1)
+    calibrate_claims_count()
+    # Plots ’conditional’ and ’unconditional calibration statistics
+    # (Figures 6.2 and 6.3)
+    claims_count_stats()
+    # Plot ’fitting comparison’ (Figure 6.4)
+    calibration_comparison()
+    # Print model and calibration parameters (Tables 6.2 = C.2 and 6.3 = C.3)
+    model_comparison()
+    # Run full calibration model (Figures 6.5 and 6.6 and Table C.4)
+    full_calibration()
 
 ### GIRF_reduced.py
 This module is used to generate the chart depicting the reduced variables and the chart depicting the claims development patters and the temporal evolution of the lags.
