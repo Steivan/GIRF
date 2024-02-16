@@ -433,4 +433,3 @@ if __name__ == "__main__":
     G = scipy_Gamma()
     G.init_E_V(E, V)
     G.test()
-    

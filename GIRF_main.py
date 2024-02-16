@@ -26,24 +26,23 @@ def patterns_and_red_var(plot_reduced=True, plot_patterns=True, gray_scale=True)
 
 # **********************************************************
     
-def calibrate_claims_count():
+def calibrate_claims_count(K=100, use_default = True):
     # Calibration of the claims count shown in Figure 6.1
     # - generative process defined by 'process_param'
     # - Y_t: simulated 'observations'
     # - generative model defined by 'model_param' 
+    # - K: count of simulations
+    # - use_default = True : use default observations, i.e., Y_t = Y_t_default
+    #               = False: draw observations Y_t from generative process parameters
     # - priors defined by 'Phi'
-    
-    use_default = True                      # True : use default observations, i.e., Y_t = Y_t_default
-                                            # False: draw observations Y_t from generative process parameters
     
     process_param, model_param, Phi, Y_t = get_freq_model(use_default_obs=use_default)
     T = process_param [0]
     (Phi_a, Phi_b, Phi_c) = Phi
     
-    K = 200                                                       # count of simulations
     claims_count_calibration(T, process_param, model_param, Y_t, Phi_a, Phi_b, Phi_c, K_sim=K,
                              fn_ID_plt=['pN_GP', 'pN_GM_0', 'pN_GM_c', 'pN_GM_ab'], 
-                             fn_ID_txt= 'pN_par')
+                             fn_ID_txt=['pN_par', 'pN_stats'])
 
 # **********************************************************
     
@@ -61,7 +60,8 @@ def claims_count_stats():
     N = 100                                     # count of calibration runs
     # Conditional statistics: Y_t is given
     Y_t_0 = Y_t
-    get_claims_count_stats(T, process_param, model_param, Y_t_0, Phi_a, Phi_b, Phi_c, K_sim=K, N_run=N)
+    get_claims_count_stats(T, process_param, model_param, Y_t_0, Phi_a, Phi_b, Phi_c, K_sim=K, N_run=N,
+                           fn_ID_uncond='uncond_stats', fn_ID_cond='cond_stats')
     
     # Unconditional statistics: Y_t is redrawn in each run
     Y_t_0 = None
@@ -124,28 +124,31 @@ if __name__ == "__main__":
 # - Output: the output file names (figures and tables) are defined in: 
 #           - GIRF_models.py / GIRF_fn_dict     
 
+    selection = [1, 2, 3, 4, 5, 6, 7]
+    selection = [4]
+    
     # Plots 'claims representation and reduced variables'
     # and 'patterns and lags' (Figures 4.1 and 4.2) 
-    patterns_and_red_var()
+    if 1 in selection: patterns_and_red_var()
     
     # Create default parameters: copy / paste from console to 
     # module GIRF_models.py
-    get_freq_model_new_default(K=100)
+    if 2 in selection: get_freq_model_new_default(K=100)
 
-    # Four plots 'calibration of the annual observations' an print
-    # parameters (Figure 6.1 (a)-(d) and Table 6.1)
-    calibrate_claims_count()
+    # Four plots 'calibration of the annual observations' and print
+    # parameters (Figure 6.1 (a)-(d), Table 6.1 = C.1, and stats file for App. C.1)
+    if 3 in selection: calibrate_claims_count()
     
     # Plots 'conditional' and 'unconditional calibration statistics
     # (Figures 6.2 and 6.3)
-    claims_count_stats()
+    if 4 in selection: claims_count_stats()
     
     # Plot 'fitting comparison' (Figure 6.4)
-    calibration_comparison()
+    if 5 in selection: calibration_comparison()
 
-    # Print model and calibration parameters (Tables 6.2 and 6.3)
-    model_comparison()
+    # Print model and calibration parameters (Tables 6.2 = C.2 and 6.3 = C.3)
+    if 6 in selection: model_comparison()
     
-    # Run full calibration model (Figures 6.5 and 6.6 and Table C4)
-    full_calibration()
+    # Run full calibration model (Figures 6.5 and 6.6 and Table C.4)
+    if 7 in selection: full_calibration()
 

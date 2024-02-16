@@ -438,7 +438,7 @@ def claims_count_Bayes(process_param, model_param, Y_t, X_max, Phi_a, Phi_b, Phi
 
 def claims_count_calibration(T, process_param, model_param, Y_t, Phi_a, Phi_b, Phi_c, K_sim=50,
                              fn_ID_plt=['dummy_plot', 'dummy_plot', 'dummy_plot', 'dummy_plot'], 
-                             fn_ID_txt= 'dummy_print'):
+                             fn_ID_txt=['dummy_print', 'dummy_print']):
 # Define overall and control variables
     plt_True = True
     N        = 100                                 # length of continuous support
@@ -450,9 +450,8 @@ def claims_count_calibration(T, process_param, model_param, Y_t, Phi_a, Phi_b, P
                                    Phi_a, Phi_b, Phi_c, K=K_sim, plt_true=plt_True, N=N,
                                    fn_ID_list=fn_ID_plt[1:])
 # Document the process    
-    print_claims_count(Y_t, K_sim, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID=fn_ID_txt)
+    print_claims_count(Y_t, K_sim, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID_list=fn_ID_txt)
   
-
 # ********************************************************
 
 def get_claims_count_stats(T, process_param, model_param, Y_t_0, Phi_a, Phi_b, Phi_c, K_sim=50, N_run=20,
@@ -908,6 +907,7 @@ def get_freq_model_new_default(K=100):
     print(f'#  - model_param, K = {model_param}, {K}')
     print('E_default = np.array(', list(np.round(E_X, 3)),')')
     print('V_default = np.array(', list(np.round(V_X, 3)),')')
+    print('s_default = np.array(', list(np.round(V_X**0.5, 3)),')')
 
 if __name__ == "__main__":
     

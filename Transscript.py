@@ -63,5 +63,4 @@ if __name__ == "__main__":
     ts_stop()
     print('Text E written to console')
     
-    
       

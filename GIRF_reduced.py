@@ -166,26 +166,27 @@ def plot_IP(tau_grid, I, P, tau_eval, col_list, fn_ID='dummy_plot'):
     
     s_0 = '$0$'
     s_t = '$time$'
+    kappa = '\\kappa'
     
-    s_t_a = m_str(' t', 'o,i', 'occ')
-    s_t_r = m_str(' t', 'o,i', 'rep')
+    s_t_a = m_str(' t', kappa, 'occ')
+    s_t_r = m_str(' t', kappa, 'rep')
     s_t_s = m_str(' t', ''  , 'sub')
-    s_t_c = m_str(' t', 'o,i', 'clo')
+    s_t_c = m_str(' t', kappa, 'clo')
     s_arsc = [s_t_a, s_t_r, s_t_s, s_t_c, ]
 
-    s_tau_r = m_str('tau', 'o,i', 'rep')
-    s_tau_I = m_str('tau', 'o,i', 'I'  )
-    s_tau_P = m_str('tau', 'o,i', 'P'  )
+    s_tau_r = m_str('tau', kappa, 'rep')
+    s_tau_I = m_str('tau', kappa, 'I'  )
+    s_tau_P = m_str('tau', kappa, 'P'  )
     
-    s_I_t = m_str(' I', 'o,i', '', '(t)')
-    s_P_t = m_str(' P', 'o,i', '', '(t)')
+    s_I_t = m_str(' I', kappa, '', '(t)')
+    s_P_t = m_str(' P', kappa, '', '(t)')
     
-    s_U = m_str(' U', 'o,i', '')
-    s_I = m_str(' I', 'o,i', '*')
-    s_P = m_str(' P', 'o,i', '*')
+    s_U = m_str(' U', kappa, '')
+    s_I = m_str(' I', kappa, '*')
+    s_P = m_str(' P', kappa, '*')
 
-    s_N_I = m_str(' N', 'o,i', 'I'   )
-    s_N_P = m_str(' N', 'o,i', 'P'   )
+    s_N_I = m_str(' N', kappa, 'I'   )
+    s_N_P = m_str(' N', kappa, 'P'   )
      
     # time lags: accident date, reported date, submission date, closure date
     tau_arsc = [0.0, 0.0 , 0.0, 1.0]      # placeholder
@@ -300,6 +301,8 @@ def plot_t_IP(t, L_I, P, index_flat, col_list, lw_list, ls_list, label_list, fn_
 #  d) resulting temporal evolution of paid lags   
  
     eps = 0.001
+    sub_kappa = '_{\\kappa}'
+
     ax_titles = [
         ['a) paid and incurred patterns', 'c) paid/incurred ratios', ],
         ['b) incurred lags',              'd) paid lags',            ],
@@ -309,8 +312,8 @@ def plot_t_IP(t, L_I, P, index_flat, col_list, lw_list, ls_list, label_list, fn_
         ['$t$ [mos.]', '$t$ [mos.]'],
         ]
     y_label = [
-        ['$I_{o,i}$, $P_{o,i}$ [m CHF]', '$P_{o,i}$ / $I_{o,i}$' ],
-        ['$\\tau_{o,i}^I$ [mos.]',       '$\\tau_{o,i}^P$ [mos.]' ],
+        [f'$I{sub_kappa}$, $P{sub_kappa}$ [m CHF]', f'$P{sub_kappa}$ / $I{sub_kappa}$' ],
+        [f'$\\tau{sub_kappa}^I$ [mos.]',       f'$\\tau{sub_kappa}^P$ [mos.]' ],
         ]
 
     def plot_IP(ax, t_IP_tau, c, lw, ls, label):

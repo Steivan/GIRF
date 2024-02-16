@@ -22,19 +22,21 @@ days_per_year = 365.25
 Units_I = 1.e6
 
 # List with names of probability distributions
-D_Bino = 'Bin'
-D_Pois = 'Poiss'
-D_negB = 'negB'
-D_Panj = 'Panj'
-D_Gamm = 'Ga'
-D_Norm = 'N'
-D_logN = 'logN'
+# -> see classes drived from 'class scipy_Distribution(object):' in GIRF_stats.py
+D_Bino = 'Bin'        # binomial
+D_Pois = 'Poiss'      # Poisson
+D_negB = 'negB'       # negative binomial
+D_Panj = 'Panj'       # Panjer class
+D_Gamm = 'Ga'         # Gamma
+D_Norm = 'N'          # normal
+D_logN = 'logN'       # lognormal
 
 # Dictionnary containing the names of the reduced variables and respective modelling parameters
+
+Red_Fields = {
 #                 Field Name,    Is_Int, Units,  Mod_1,  Mod_2,  Label 
 #                                                  c      a,b
-Red_Fields = {
-              0: ('Rep. Count' , True,  1,       D_negB, D_logN, r'$N^{loss}$'  ),
+              0: ('Rep. Count' , True,  1,       D_negB, D_logN, r'$N^{rep}$'  ),
               1: ('Clos. Count', True,  1,       D_negB, '__',   r'$N^{clo}$'   ),
               2: ('Incurred'   , False, Units_I, D_logN, D_logN, r'$\hat{I}^*$' ),
               3: ('Paid'       , False, Units_I, D_logN, '__',   r'$\hat{P}^*$' ),
@@ -46,8 +48,9 @@ Red_Fields = {
              }
 
 # Dictionnary with Figure file names (plot) and Table file names (print)
-plt_list = ['.pdf', '.png']
-txt_list = ['.txt']
+plt_list = ['.pdf', '.png']          # extensions of plot  filenames
+txt_list = ['.txt']                  # extension  of print filename (only first entry is used)
+
 GIRF_fn_dict = {
 #    fn_ID             file_name                ext       LaTeX 
     'dummy_plot'   : ('dummy_plot_file',        plt_list, None),
@@ -61,13 +64,14 @@ GIRF_fn_dict = {
     'pN_GM_c'      : ('pdf_fit_c',              plt_list, 'Figure 6.1.c)'),
     'pN_GM_ab'     : ('pdf_fit_ab',             plt_list, 'Figure 6.1.d)'),
     'pN_par'       : ('T_pdf_fit_param',        txt_list, 'Table 6.1. and C.1'),
+    'pN_stats'     : ('T_pdf_fit_stats',        txt_list, 'Appendix C.1'),
     
     'cond_stats'   : ('cond_calibration_stats', plt_list, 'Figure 6.2.'),
     'uncond_stats' : ('calibration_stats',      plt_list, 'Figure 6.3.'),
     
     'fit_comp'     : ('fit_comparison',         plt_list, 'Figure 6.4.'),
     'fit_comp_mod' : ('T_comp_model_param',     txt_list, 'Table 6.2. and C.2'),
-    'fit_comp_par' : ('T_comp_calibr_param',    txt_list, 'Table 6.3 and C.4.'),
+    'fit_comp_par' : ('T_comp_calibr_param',    txt_list, 'Table 6.3 and C.3'),
     
     'all_it'       : ('evolution_all_ab_it_',   plt_list, 'Figure 6.5. and 6.6'),  # iteration_nr is appended to file_name
     'all_it_par'   : ('T_all_fit_param',        txt_list, 'Table C.4'),
@@ -81,7 +85,7 @@ def get_patterns(gray_scale = True):
 # Basis for evaluating reduced variables shown in Figure 4.1
 # gray_scale = True/False is used for figures in printed/online version
     
-    time_grid =  [15, 20, 30, 40, 50, 65, 90,120]        # time stamps in [months] since occurrence
+    time_grid =  [15, 20, 30, 40, 50, 65, 90, 120]       # time stamps in [months] since occurrence
 
     Inc_list  = [                                        # list with examples of incurred patterns I_i = I(t_i+) 
          [44, 44, 40, 40, 40, 34, 34, 32],               # favorable, decrease
@@ -94,7 +98,7 @@ def get_patterns(gray_scale = True):
         ]   
     index_flat = 2                                       # index of flat incurred pattern
     
-    Paid       = [ 0,  3,  7, 12, 18, 23, 28, 32]        # cumulative paid pattern P_i = P(t_i+) 
+    Paid = [ 0,  3,  7, 12, 18, 23, 28, 32]              # cumulative paid pattern P_i = P(t_i+) 
     
     # labels and plot-parameters for the incurred patterns and the paid pattern:
     label_list = [
@@ -118,8 +122,8 @@ def get_patterns(gray_scale = True):
 #  - process_param = (12, 5.0, 15.0, 1.25)
 Y_t_default = np.array( [ 3, 4, 6, 7, 10, 10, 7, 8, 12, 8, 18, 13] )
 #  - model_param, K = (12, 10.0, 20.0, 1.0), 100
-E_default   = np.array( [10.630, 10.365,11.315, 11.855, 12.365, 13.580, 14.620, 15.645, 16.120, 18.025, 18.780, 19.955] )
-V_default   = np.array( [11.183, 11.742, 9.916, 12.484, 11.442, 12.004, 16.506, 16.909, 15.856, 17.534, 21.572, 24.063] )
+E_default = np.array( [10.630, 10.365,11.315, 11.855, 12.365, 13.580, 14.620, 15.645, 16.120, 18.025, 18.780, 19.955] )
+V_default = np.array( [11.183, 11.742, 9.916, 12.484, 11.442, 12.004, 16.506, 16.909, 15.856, 17.534, 21.572, 24.063] )
 
 def get_freq_model(use_default_obs=False):
 # Frequency model used in Figurs 6.1, 6.2 and 6.3
@@ -199,7 +203,6 @@ def param_R_c_models():
     Phi_c = 1
     
     return param_lists, E, V, Y_t, Phi_c
-    
 
 # *********************************
 
@@ -243,8 +246,8 @@ def get_full_model():
     process_param = [[  10,      0,  1.0E8,      0,     4.5,     2.5,     15.0,    5,   10],       # o = -T
                      [  30,      0,  1.5E8,      0,     3.5,    -1.5,     10.0,    8,    5],       # o = -1
                      ]
-    model_param   = [[  20,      0,  2.0E8,      0,     3.0,     0.0,     18.0,   10,   12],       # o = -T
-                     [  40,      0,  2.5E8,      0,     3.0,     0.0,     18.0,   10,   12],       # o = -1
+    model_param   = [[  20,      0,  2.0E8,      0,     3.0,     0.01,    18.0,   10,   12],       # o = -T
+                     [  40,      0,  2.5E8,      0,     3.0,     0.01,    18.0,   10,   12],       # o = -1
                      ]
 # features to be calibrated    
     cal_True       = [True,  False,   True,  False,    True,    True,     True, True, True]

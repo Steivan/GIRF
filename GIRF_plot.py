@@ -6,6 +6,7 @@ Created on Thu Jan  4 15:21:29 2024
 """
 
 import numpy as np
+from scipy import stats
 import matplotlib.pyplot as plt
 plt.rcParams['figure.dpi']  = 600
 plt.rcParams['savefig.dpi'] = 600
@@ -223,17 +224,20 @@ def plot_claims_cont(T, pdf_supp, pmf_supp, data_t, data1, Y_t, p_Y, aggr_dist, 
         
 # *********************************
 
-def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID='pN_par'):
+def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID_list=['dummy_print', 'dummy_print']):
 # Y_t     : List with 'simulated' observations
 # K       : count of simulation runs    
 # M_EV_p  : generative process
 # M_EV_m  : prior model
 # M_EV_c  : scale calibration
 # M_EV_ab : linear-trend calibration
+    n_dec = 3
+    
     def get_s_x(x, n): 
         # if x == int(x): return f' & {int(x)}'
         # else:           return f' & {x:.{n}f}'
         return f' & {x:.{n}f}'
+
     def get_str(i, label, a, b, t0, mu_0, mu_T, f_P, N_, mu, mu1, n1=1, n2=2, is_line_2=False):
         s_d  = ' & '
         s1   = s_d + s_d + s_d
@@ -252,11 +256,53 @@ def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID='pN_par'):
         s3 = s3_1 + get_s_x(mu, 1) + get_s_x(mu1, 1)
         return s0 + s1 + s2 + s3 + '\\\\'
 
-    filename = print_file_name(fn_ID)
+    def get_M_stats(M):
+        (_, cal_ab, param, E_p, _, E1, _, _, _) = M
+        (T, E_0, E_T, _) = param
+        E_1 = E_T * np.exp((np.log(E_T)-np.log(E_0))/(T-1)*2)
+        E_t,_ = get_E_t(T, E_0, E_T)
+        return T, E_0, E_T, E_t, E_p, E_1, E1, cal_ab
+
+    def s_x(x, n_dec=n_dec): return f'{x:.{n_dec}f}'
+    
+    def print_stats(s_label, X, ln_X, o_0, slope, intersection, n_dec=n_dec):
+        print(f'- {s_label}:')
+        print('    ', list(np.round(X, n_dec-1)))
+        print(f'      mean = {s_x(X.mean())}')
+        print(' ln:', list(np.round(ln_X, n_dec-1)))
+        print(f'      mean = {s_x(ln_X.mean())}')
+        print(f'      LR (o_0 = {o_0}): slope = {s_x(slope)} / intersection = {s_x(intersection)}')
+
+    def analyze(t, x, ln_x, y, ln_y):
+        mean_x = x.mean()
+        slo_ln_x, int_ln_x, r, p, se = stats.linregress(t, ln_x)
+        
+        mean_y = y.mean()
+        slo_ln_y, int_ln_y, r, p, se = stats.linregress(t, ln_y)
+        
+        c = np.log(mean_y / mean_x)
+        a = int_ln_y - int_ln_x 
+        b = slo_ln_y - slo_ln_x
+        return c, (a,b)
+    
+# Parameters and statistics from gen process and gen model
+    T, Ep_0, Ep_T, Ep_t, Ep_p, Ep_1, Ep1,      _ = get_M_stats(M_EV_p)
+    T, Em_0, Em_T, Em_t, Em_p, Em_1, Em1,      _ = get_M_stats(M_EV_m)
+    _,    _,    _,    _,    _,    _,   _, cal_c  = get_M_stats(M_EV_c)
+    _,    _,    _,    _,    _,    _,   _, cal_ab = get_M_stats(M_EV_ab)
+    
+    (c_MAP, _, _)  = cal_c
+    (a_MAP, b_MAP, t0) = cal_ab
+    
+    mu_t = Em_p
+
+# Create LaTeX table with parameters and results
+    filename = print_file_name(fn_ID_list[0])
     print()
     print(f'Model parameters for LaTeX table: -> {filename}')
     print('Simulation runs     :', K)
     print()
+    
     ts_start(filename, wa='w')                       # start transscript to file (erase prior content)
     print('\\begin{tabular}{lrrrSSSrSS}')
     print('\\toprule')
@@ -268,7 +314,7 @@ def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID='pN_par'):
     
     for i, M in enumerate([M_EV_p, M_EV_m, M_EV_c, M_EV_ab]): 
 # model parameters and statistics
-        (label_1, cal_ab, param, E_p, V_p, E1, V1, stats, plot_FN) = M
+        (label_1, cal_ab, param, E_p, V_p, E1, V1, m_stats, plot_FN) = M
         (a, b, t0)         = cal_ab
         (T, E_0, E_T, f_P) = param
         E_t, E1 = get_E_t(T, E_0, E_T)
@@ -276,7 +322,7 @@ def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID='pN_par'):
         print(get_str(i, label_1, a, b, t0-T, E_0, E_T, f_P, 0, mu, E1))
 # simulated statistics
         N_ = Y_t.sum() / T
-        (range_stats, tot_stats_1, tot_stats_2) = stats
+        (range_stats, tot_stats_1, tot_stats_2) = m_stats
         (mu_0, mu_T, f_P_2) = range_stats
         (mu_1, s_1, E1_1) = tot_stats_1                            # pmf  statistics
         (mu_2, s_2, E1_2) = tot_stats_2                            # logN statistics
@@ -304,7 +350,7 @@ def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID='pN_par'):
     print(s1)
     
     # simulated annual means drawn from (prior) generative model
-    (_, _, _, mu_t, _, _, _, _, _) = M_EV_m
+    # (_, _, _, mu_t, _, _, _, _, _) = M_EV_m
     s2 ="for the 'toy model'& $\mu^{0}_{o}$ & \multicolumn{8}{l}{$("
     n = len(mu_t)
     for i in range(n): 
@@ -320,7 +366,86 @@ def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID='pN_par'):
     print('\\end{tabular}')
     ts_stop()                               # stop transscript to file
     print()
+    
+# Create file with stats
 
+    # t_0 = (T-1) / 2
+    o_0 = t0 - T
+    t = np.arange(T) - t0
+    
+    ln_mu_p = np.linspace(np.log(Ep_0), np.log(Ep_T), T)
+    mu_p = np.exp(ln_mu_p)
+    slo_mu_p, int_mu_p, r, p, se = stats.linregress(t, ln_mu_p)
+        
+    ln_Y_t =np.log(Y_t)
+    slo_Y_t, int_Y_t, r, p, se = stats.linregress(t, ln_Y_t)
+    
+    ln_mu_m = np.linspace(np.log(Em_0), np.log(Em_T), T)
+    mu_m = np.exp(ln_mu_m)
+    slo_mu_m, int_mu_m, r, p, se = stats.linregress(t, ln_mu_m)
+
+    ln_mu_t = np.log(mu_t)
+    slo_mu_t, int_mu_t, r, p, se = stats.linregress(t, ln_mu_t)
+    
+    c_calc, (a_calc, b_calc) = analyze(t, mu_m, ln_mu_m, mu_p, ln_mu_p) 
+    c_sim, (a_sim, b_sim) = analyze(t, mu_t, ln_mu_t, Y_t, ln_Y_t) 
+    
+    filename = print_file_name(fn_ID_list[1])
+    print()
+    print(f'Statistics: -> {filename}')
+    print('Simulation runs     :', K)
+    print()
+
+    ts_start(filename, wa='w')                       # start transscript to file (erase prior content)
+    print('\\begin{verbatim}')
+
+    print('o:   ', list(np.arange(-T,0)))
+    
+    print('Generative process:')
+    print_stats('Specified mu_o', mu_p, ln_mu_p, o_0, slo_mu_p, int_mu_p)    
+    print_stats('Observed Y_o (K=1)',   Y_t,  ln_Y_t,  o_0, slo_Y_t,  int_Y_t)    
+    # print('')
+
+    print('Generative model:')
+    print_stats('Specified mu_o', mu_m, ln_mu_m, o_0, slo_mu_m, int_mu_m)    
+    print_stats(f'Simulated mu_o (K={K})', mu_t, ln_mu_t, o_0, slo_mu_t, int_mu_t)    
+    # print('')
+
+    print('Generative process and prior model:')
+    print(f'- gen processl: mu_1 = {s_x(Ep_1)}')
+    print(f'- gen model   : mu_1 = {s_x(Em_1)}')
+    
+    print('Scale calibration and projection:')    
+    mu_1_m = Em_1 * np.exp(c_calc)    # Em_1: adjustment applied to modelled  projection
+    mu_1_f = Em_1 * np.exp(c_sim )    
+    mu_1_B = Em_1 * np.exp(c_MAP )
+    print(f'- model: c = ln({s_x(mu_p.mean())} / {s_x(mu_m.mean())}) = {s_x(c_calc)} / \
+mu_1 = {s_x(mu_1_m)}')
+    print(f'- freq : c = ln({s_x(Y_t .mean())} / {s_x(mu_t.mean())}) = {s_x(c_sim )} / \
+mu_1 = {s_x(mu_1_f)}')
+    print(f'- Bayes: c =                      {s_x(c_MAP )} / \
+mu_1 = {s_x(mu_1_B)}')
+    # print('')
+
+    print(f'Linear-trend calibration and projection (o_0 = {o_0}):')  
+    mu_1_m = Em_1 * np.exp(a_calc + b_calc * (1-o_0))    # Em_1: adjustment applied to modelled  projection
+    mu_1_f = Em_1 * np.exp(a_sim  + b_sim  * (1-o_0))
+    mu_1_B = Em_1 * np.exp(a_MAP  + b_MAP  * (1-o_0))
+    print(f'- model: a = {s_x(int_mu_p)} - {s_x(int_mu_m)} = {s_x(a_calc)} / \
+b = {s_x(slo_mu_p, n_dec=n_dec+1)} - {s_x(slo_mu_m, n_dec=n_dec+1)} = {s_x(b_calc, n_dec=n_dec+1)} / \
+mu_1 = {s_x(mu_1_m)}')
+    print(f'- freq : a = {s_x(int_Y_t )} - {s_x(int_mu_t)} = {s_x(a_sim )} / \
+b = {s_x(slo_Y_t, n_dec=n_dec+1 )} - {s_x(slo_mu_t, n_dec=n_dec+1)} = {s_x(b_sim , n_dec=n_dec+1)} / \
+mu_1 = {s_x(mu_1_f)}')
+    print(f'- Bayes: a =                 {s_x(a_MAP)} / \
+b =                   {s_x(b_MAP, n_dec=n_dec+1)} / \
+mu_1 = {s_x(mu_1_B)}')
+
+    print('\\end{verbatim}')
+    ts_stop()                                                    # stop transscript to file
+
+    print()
+    
 # *********************************
 
 def print_all_param(param_labels, process_param, model_param, T, cal_True, Phi_cal, fn_ID='dummy_print'):
@@ -828,8 +953,6 @@ def plot_evol_all(T, N_param, iteration, Y0, proc_data, mod_data, log_True, q_mi
     plt.show()    
     
     return [q_min, q_max]
-
-
 
 # if __name__ == "__main__":
 
