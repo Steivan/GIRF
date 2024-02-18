@@ -412,8 +412,8 @@ def print_claims_count(Y_t, K, M_EV_p, M_EV_m, M_EV_c, M_EV_ab, fn_ID_list=['dum
     # print('')
 
     print('Generative process and prior model:')
-    print(f'- gen processl: mu_1 = {s_x(Ep_1)}')
-    print(f'- gen model   : mu_1 = {s_x(Em_1)}')
+    print(f'- gen process: mu_1 = {s_x(Ep_1)}')
+    print(f'- gen model  : mu_1 = {s_x(Em_1)}')
     
     print('Scale calibration and projection:')    
     mu_1_m = Em_1 * np.exp(c_calc)    # Em_1: adjustment applied to modelled  projection
