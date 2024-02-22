@@ -116,7 +116,8 @@ def get_patterns(gray_scale = True):
     
 # *********************************
 
-# Defaults created with 'get_freq_model_new_default()' in module or GIRF_main.py (or GIRF_calibrate.py) 
+# Defaults created with 'get_new_default_param()' in module or GIRF_main.py 
+# (or with 'get_freq_model_new_default()' in GIRF_calibrate.py) 
 
 # random variables drawn from:
 #  - process_param = (12, 5.0, 15.0, 1.25)
